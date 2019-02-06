@@ -21,7 +21,7 @@ MongoClient.connect("mongodb://localhost:27017", (error, client) => {
     // });
 
     db.collection('User').findOneAndDelete({ _id: new ObjectID("5c5afef704022a84937c35e2") }).then((result) => {
-        console.log(result);
+        console.log(result); 
     })
     //    client.close();
 })
