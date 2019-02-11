@@ -24,13 +24,19 @@ app.post('/todos', (req, res) => {
     console.log(req.body);
 });
 
-
+app.get('/todos', (req, res) => {
+    Todo.find().then((todos) => {
+        res.send({ todos });
+    }, (error) => {
+        res.status(400).send(error);
+    })
+})
 
 app.listen(3000, () => {
     console.log("started on 3000 ");
 });
 
 
-module.exports={
+module.exports = {
     app
 }
