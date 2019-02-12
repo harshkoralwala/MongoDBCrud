@@ -7,6 +7,7 @@ var { userModel } = require('./models/user');
 var { ObjectID } = require('mongodb')
 
 var app = express();
+const port = process.env.port || 3000;
 app.use(bodyParser.json());
 
 app.post('/todos', (req, res) => {
@@ -45,9 +46,25 @@ app.get('/todos/:id', (req, res) => {
     })
 })
 
+app.delete('/todos/:id', (req, res) => {
+    let id = req.params.id;
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send();
+    }
 
-app.listen(3000, () => {
-    console.log("started on 3000 ");
+    Todo.findByIdAndRemove({ _id: id }).then((doc) => {
+        if (!doc) {
+            res.status(404).send();
+        }
+        res.status(200).send(doc);
+        console.log(res);
+    }, (error) => {
+        res.status(400).send();
+    })
+});
+
+app.listen(port, () => {
+    console.log("started on ", port);
 });
 
 
