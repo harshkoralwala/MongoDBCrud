@@ -145,3 +145,12 @@ describe('delete /todos/:id', () => {
         })
     })
 });
+
+// describe('PATCH /todos/:id', () => {
+//     it('shuld update to do', (done)=> {
+
+//     })
+//     it('shuld clear c to do', (done)=> {
+
+//     })
+// })
