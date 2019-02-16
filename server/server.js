@@ -93,10 +93,12 @@ app.post("/users", (req, res) => {
     var user = new userModel(userBody);
 
     user.save().then((userRes) => {
+        console.log('DAta Saved');
         return user.generateAuthToken()
     }).then((token) => {
         res.header('x-auth', token).send(user);
     }, (err) => {
+        console.log(err)
         res.status(400).send(err);
     })
 })

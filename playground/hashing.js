@@ -2,17 +2,37 @@ var { SHA256 } = require('crypto-js');
 
 const jwt = require('jsonwebtoken');
 
-var data = {
-    id: 10
-}
-var token=jwt.sign(data, '123abc');
-console.log(token);
+const bcrypt = require("bcryptjs");
+
+
+var password = "123abc!";
+
+bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(password, salt, (err, hash) => {
+        console.log(hash);
+    });
+});
+
+
+// var hashPassword = "$2a$10$hvQY9sD2wlFSfr3HVlMLIeU4GbJUDIKFmPsnLUdFn8REhNKQmhM6q";
+
+// bcrypt.compare(password, hashPassword, (err, res) => {
+//     console.log(res);
+// })
 
 
 
-var decode=jwt.verify(token,'123abc');
+// var data = {
+//     id: 10
+// }
+// var token=jwt.sign(data, '123abc');
+// console.log(token);
 
-console.log("decoded=>",decode);
+
+
+// var decode=jwt.verify(token,'123abc');
+
+// console.log("decoded=>",decode);
 // var message = "Harsh Koralwala";
 
 
