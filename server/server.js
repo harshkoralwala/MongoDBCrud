@@ -15,15 +15,13 @@ app.post('/todos', (req, res) => {
     var todo = new Todo({
         firstName: req.body.firstName
     });
-
     todo.save().then((doc) => {
         res.send(doc);
     }, (e) => {
+        //   console.log(e);
         res.status(400).send(e)
     });
 
-
-    console.log(req.body);
 });
 
 app.get('/todos', (req, res) => {
@@ -58,7 +56,6 @@ app.delete('/todos/:id', (req, res) => {
             res.status(404).send();
         }
         res.status(200).send(doc);
-        console.log(res);
     }, (error) => {
         res.status(400).send();
     })
@@ -88,17 +85,14 @@ app.patch('/todos/:id', (req, res) => {
 });
 
 app.post("/users", (req, res) => {
-
     var userBody = _.pick(req.body, ["email", "password"]);
     var user = new userModel(userBody);
-
     user.save().then((userRes) => {
-        console.log('DAta Saved');
         return user.generateAuthToken()
     }).then((token) => {
         res.header('x-auth', token).send(user);
     }, (err) => {
-        console.log(err)
+        console.log(err);
         res.status(400).send(err);
     })
 })
