@@ -8,19 +8,8 @@ const { ObjectID } = require('mongodb')
 
 const { todos, populateTodos, users, populateUsers } = require("./seed/seed");
 
-//console.log("!!!!!!!");
 beforeEach(populateUsers);
 beforeEach(populateTodos);
-//console.log("&&&&&&&&&&&&&&");
-// beforeEach(();
-
-
-
-
-
-
-
-
 
 describe('Post/todos', () => {
     it('should create one todo ', (done) => {
@@ -211,7 +200,7 @@ describe("post /users", () => {
                     expect(user).toBeTruthy();
                     expect(user.password).not.toBe(password);
                     done();
-                })
+                }).catch((err) => done(err));
             });
     })
 
@@ -235,4 +224,52 @@ describe("post /users", () => {
 
     })
 
+})
+
+describe("post /users/login", () => {
+
+    it("should user login and retun auth token", (done) => {
+        request(app)
+            .post("/users/login")
+            .send({
+                email: users[1].email,
+                password: users[1].password
+            })
+            .expect(200)
+            .expect((res) => {
+                expect(res.header['x-auth']).toBeTruthy();
+            })
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+                userModel.findById(users[1]._id).then((user) => {
+                    expect(user.tokens[0]).toMatchObject({
+                        access: 'auth',
+                        token: res.headers['x-auth']
+                    });
+                    done();
+                }).catch((err) => done(err));
+            })
+    })
+
+    it("should reject invalid token", (done) => {
+        request(app)
+            .post("/users/login")
+            .send({
+                email: "h2@yopmail.com",
+                passsword: "asa123"
+            })
+            .expect(400)
+            .expect((res) => {
+                expect(res.headers['x-auth']).toNotExist();
+            })
+            .end((err, res) => {
+                userModel.findById(users[1]._id).then((user) => {
+                    console.log(user);
+                    expect(user.tokens.length).toBe(0);
+                    done();
+                }).catch((err) => done(err));
+            })
+    })
 })
