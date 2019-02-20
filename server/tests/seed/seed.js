@@ -17,16 +17,22 @@ const users = [{
 }, {
     _id: userTwoId,
     email: "h2@yopmail.com",
-    password: "userTwoPass"
+    password: "userTwoPass",
+    tokens: [{
+        access: "auth",
+        token: jwt.sign({ _id: userTwoId, access: "auth" }, "abc123").toString()
+    }]
 }]
 
 
 const todos = [{
     _id: new ObjectID(),
-    firstName: "first"
+    firstName: "first",
+    _creator: userOneId
 }, {
     _id: new ObjectID(),
-    firstName: "first 2"
+    firstName: "first 2",
+    _creator: userTwoId,
 }]
 
 

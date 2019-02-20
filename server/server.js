@@ -11,21 +11,21 @@ var app = express();
 const port = process.env.port || 3000;
 app.use(bodyParser.json());
 
-app.post('/todos', (req, res) => {
+app.post('/todos', authenticate, (req, res) => {
     var todo = new Todo({
-        firstName: req.body.firstName
+        firstName: req.body.firstName,
+        _creator: req.user._id
     });
     todo.save().then((doc) => {
         res.send(doc);
     }, (e) => {
-        //   console.log(e);
         res.status(400).send(e)
     });
 
 });
 
-app.get('/todos', (req, res) => {
-    Todo.find().then((todos) => {
+app.get('/todos', authenticate, (req, res) => {
+    Todo.find({ _creator: req.user._id }).then((todos) => {
         res.send({ todos });
     }, (error) => {
         res.status(400).send(error);

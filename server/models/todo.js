@@ -14,7 +14,12 @@ var Todo = mongoose.model("Todo", {
     isActive: {
         type: Boolean,
         default: false
+    },
+    _creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        require: true,
     }
+
 });
 
 
